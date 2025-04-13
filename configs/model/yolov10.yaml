@@ -1,0 +1,87 @@
+model:
+  name: "yolov10_yeast"
+  num_classes: 1              # 酵母细胞只有一类
+  input_size: [640, 640]      # 增大输入图像尺寸以提高小目标检测能力
+  anchors:
+    - [6, 8, 10, 12]         # 更小的anchor用于小细胞检测
+    - [15, 18, 22, 25]       # 中等尺寸
+    - [30, 35, 40, 45]       # 大尺寸
+  no_nms_train: true         # 使用双标签分配代替NMS
+  topk_candidates: 100       # TopK筛选数量
+  optimization:
+    use_psa: true            # 使用部分自注意力模块
+    use_large_kernel: true   # 使用大核卷积
+    use_scdown: true         # 使用空间通道解耦降采样
+    use_dws_conv: true       # 使用深度可分离卷积
+
+train:
+  batch_size: 16
+  epochs: 200                # 增加训练轮次以提高性能
+  lr: 0.01                   # 使用更高的初始学习率，然后动态调整
+  lr_scheduler:
+    name: "cosine"           # 余弦退火学习率调度
+    warmup_epochs: 5
+    warmup_lr: 0.0001
+  device: "cuda"              # 使用GPU加速
+  num_workers: 4
+  save_dir: "checkpoints"
+  log_dir: "logs"
+  save_interval: 5            # 每5个epoch保存一次模型
+  amp: true                   # 使用混合精度训练以加速
+  grad_clip: 10.0             # 梯度剪裁防止梯度爆炸
+  ema:
+    enabled: true             # 使用指数移动平均
+    decay: 0.9999
+
+data:
+  train_path: "data/train"
+  val_path: "data/val"
+  test_path: "data/test"
+  image_size: [640, 640]
+  augmentations:
+    # 基础增强
+    - RandomBrightnessContrast:
+        brightness_limit: 0.2
+        contrast_limit: 0.2
+        p: 0.7
+    - GaussianBlur:
+        blur_limit: 7
+        p: 0.3
+    - RandomGamma:
+        gamma_limit: [80, 120]
+        p: 0.5
+    # 几何变换增强
+    - HorizontalFlip:
+        p: 0.5
+    - VerticalFlip:
+        p: 0.5
+    - Rotate:
+        limit: 45
+        p: 0.7
+    # 马赛克增强
+    - Mosaic:
+        enabled: true
+        p: 0.7
+    # 针对小目标的增强
+    - RandomScale:
+        scale_limit: [0.5, 1.5]
+        p: 0.5
+    - GridDropout:
+        ratio: 0.2
+        p: 0.3
+    - CutOut:
+        num_holes: 8
+        max_h_size: 16
+        max_w_size: 16
+        p: 0.3
+
+evaluation:
+  conf_thresh: 0.15           # 降低置信度阈值以提高小目标检测召回率
+  iou_thresh: 0.45
+  metrics:
+    - precision
+    - recall
+    - f1_score
+    - map_50                  # IoU阈值为0.5的mAP
+    - map_75                  # IoU阈值为0.75的mAP
+    - map_small               # 小目标mAP 

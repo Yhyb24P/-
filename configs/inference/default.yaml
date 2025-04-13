@@ -1,0 +1,31 @@
+inference:
+  # 基本参数
+  confidence_thresh: 0.5       # 置信度阈值
+  iou_thresh: 0.45            # NMS IoU阈值
+  device: "cuda:0"            # 推理设备
+  batch_size: 1               # 批处理大小
+  img_size: [640, 640]        # 输入图像大小
+  
+  # 预处理
+  preprocess:
+    normalize: true           # 是否归一化
+    means: [0.485, 0.456, 0.406]
+    stds: [0.229, 0.224, 0.225]
+    scale_fill: false         # 缩放填充方式
+    auto_size: true           # 自动调整大小
+  
+  # 后处理
+  postprocess:
+    use_nms: true             # 是否使用NMS
+    max_detections: 300       # 最大检测数
+    min_area: 4               # 最小目标面积
+    max_area: 0.8             # 最大目标面积（相对于图像）
+  
+  # 可视化
+  visualization:
+    enable: true              # 是否开启可视化
+    line_thickness: 2         # 边框线条粗细
+    text_scale: 0.5           # 文本缩放
+    colormap: "rainbow"       # 颜色映射
+    draw_scores: true         # 是否显示置信度分数
+    class_names: ["酵母细胞"] # 类别名称 

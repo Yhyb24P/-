@@ -1,0 +1,115 @@
+augmentation:
+  # 基础几何变换
+  basic:
+    enabled: true
+    horizontal_flip:
+      enabled: true
+      probability: 0.5
+    vertical_flip:
+      enabled: true
+      probability: 0.5
+    rotate:
+      enabled: true
+      probability: 0.7
+      limit: 45  # 旋转角度范围 (-limit, limit)
+    scale:
+      enabled: false
+      probability: 0.5
+      scale_limit: 0.1  # 缩放范围 (1-scale_limit, 1+scale_limit)
+    shift:
+      enabled: false
+      probability: 0.5
+      shift_limit: 0.1  # 平移范围 (-shift_limit, shift_limit)
+  
+  # 颜色和亮度调整
+  color:
+    enabled: true
+    brightness_contrast:
+      enabled: true
+      probability: 0.7
+      brightness_limit: 0.2  # 亮度变化范围 (-limit, limit)
+      contrast_limit: 0.2    # 对比度变化范围 (-limit, limit)
+    hue_saturation:
+      enabled: false
+      probability: 0.5
+      hue_shift_limit: 20    # 色调变化范围 (-limit, limit)
+      sat_shift_limit: 30    # 饱和度变化范围 (-limit, limit)
+      val_shift_limit: 20    # 明度变化范围 (-limit, limit)
+    sharpen:
+      enabled: true
+      probability: 0.5
+      alpha: [0.2, 0.5]      # 锐化强度
+  
+  # 噪声添加
+  noise:
+    enabled: true
+    gaussian_noise:
+      enabled: true
+      probability: 0.5
+      var_limit: [10.0, 50.0]  # 噪声方差范围
+    jpeg_compression:
+      enabled: false
+      probability: 0.5
+      quality_lower: 70      # JPEG压缩质量下限
+      quality_upper: 90      # JPEG压缩质量上限
+  
+  # 模糊效果
+  blur:
+    enabled: true
+    gaussian_blur:
+      enabled: true
+      probability: 0.5
+      blur_limit: 7          # 模糊核大小
+    motion_blur:
+      enabled: false
+      probability: 0.5
+      blur_limit: 7          # 模糊核大小
+  
+  # 组合变换
+  combined:
+    enabled: false
+    one_of:  # 从下列变换中随机选择一个
+      - name: rain
+        probability: 0.3
+      - name: fog
+        probability: 0.3
+      - name: sun_flare
+        probability: 0.2
+      - name: shadow
+        probability: 0.2
+  
+  # 光照变化（特别针对显微镜图像）
+  microscope:
+    enabled: true
+    illumination_shift:
+      enabled: true
+      probability: 0.5
+      intensity: 0.3  # 光照强度变化
+    vignette:  # 晕影效果
+      enabled: true
+      probability: 0.3
+      intensity: [0.1, 0.3]
+
+  # 针对小目标的增强
+  small_object:
+    random_scale:
+      enabled: true
+      scale_limit: [0.5, 1.5]
+      p: 0.5
+    grid_dropout:
+      enabled: false
+      ratio: 0.2
+      p: 0.3
+  
+  # 马赛克增强
+  mosaic:
+    enabled: false
+    p: 0.0
+
+  # Cutout增强
+  cutout:
+    enabled: false
+    num_holes: 8
+    max_h_size: 16
+    max_w_size: 16
+    p: 0.3 

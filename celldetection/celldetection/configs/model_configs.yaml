@@ -1,0 +1,134 @@
+# 模型配置文件
+
+# 基础模型配置
+base_model:
+  name: "yolov5"
+  version: "s"  # 可选: n, s, m, l, x
+  input_size: [640, 640]
+  pretrained: true
+  num_classes: 1
+  
+  # 特征提取器配置
+  backbone:
+    name: "CSPDarknet"
+    depth_multiple: 0.33  # 深度乘数
+    width_multiple: 0.5   # 宽度乘数
+    activation: "SiLU"    # 激活函数
+    
+  # 特征金字塔网络配置
+  neck:
+    name: "PANet"
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    activation: "SiLU"
+    
+  # 检测头配置
+  head:
+    name: "YOLOHead"
+    anchors: [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45], [59, 119], [116, 90], [156, 198], [373, 326]]
+    strides: [8, 16, 32]
+    activation: "SiLU"
+
+# 高分辨率模型配置
+high_res_model:
+  name: "cell_hrnet"
+  input_size: [640, 640]
+  pretrained: false
+  num_classes: 1
+  
+  # 高分辨率网络配置
+  backbone:
+    name: "CellHighResolutionNet"
+    input_channels: 3
+    base_channels: 32
+    num_modules: 2
+    num_branches: 3
+    
+  # 检测头配置
+  head:
+    name: "HRNetHead"
+    in_channels: [32, 64, 128]
+    out_channels: 32
+    num_classes: 1
+
+# 注意力增强模型配置
+attention_model:
+  name: "yolov5_attention"
+  version: "s"
+  input_size: [640, 640]
+  pretrained: true
+  num_classes: 1
+  
+  # 特征提取器配置
+  backbone:
+    name: "CSPDarknet"
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    activation: "SiLU"
+    
+    # 注意力模块配置
+    attention:
+      name: "CBAM"  # 可选: CBAM, YeastAttention, ScaleAdaptiveAttention
+      reduction_ratio: 16
+      
+  # 特征金字塔网络配置
+  neck:
+    name: "PANet"
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    activation: "SiLU"
+    
+    # 注意力模块配置
+    attention:
+      name: "YeastAttention"
+      
+  # 检测头配置
+  head:
+    name: "YOLOHead"
+    anchors: [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45], [59, 119], [116, 90], [156, 198], [373, 326]]
+    strides: [8, 16, 32]
+    activation: "SiLU"
+
+# 密度感知模型配置
+density_aware_model:
+  name: "density_aware_yolo"
+  version: "s"
+  input_size: [640, 640]
+  pretrained: true
+  num_classes: 1
+  
+  # 特征提取器配置
+  backbone:
+    name: "CSPDarknet"
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    activation: "SiLU"
+    
+  # 特征金字塔网络配置
+  neck:
+    name: "PANet"
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    activation: "SiLU"
+    
+  # 检测头配置
+  head:
+    name: "DensityAwareHead"
+    anchors: [[10, 13], [16, 30], [33, 23], [30, 61], [62, 45], [59, 119], [116, 90], [156, 198], [373, 326]]
+    strides: [8, 16, 32]
+    activation: "SiLU"
+    
+    # 密度预测配置
+    density:
+      enable: true
+      kernel_size: 3
+      sigma: 2.0
+      
+  # 后处理配置
+  post_process:
+    name: "DensityAwareNMS"
+    iou_threshold: 0.5
+    score_threshold: 0.25
+    density_aware: true
+    min_threshold: 0.1
+    max_threshold: 0.5

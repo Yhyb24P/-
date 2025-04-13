@@ -1,0 +1,58 @@
+model:
+  name: yolov10_yeast
+  input_size: [640, 640]
+  num_classes: 4
+  backbone:
+    type: csp_darknet53
+    width_multiple: 0.5
+  head:
+    anchors: [[10,13], [16,30], [33,23]]
+
+data:
+  train_dir: data/processed/train
+  val_dir: data/processed/val
+  test_dir: data/processed/test
+  ann_dir: data/annotations
+  image_size: 640
+  mosaic_prob: 0.5
+  cache_images: False
+  augment:
+    hsv_h: 0.015  # 色调增强
+    hsv_s: 0.7    # 饱和度增强
+    hsv_v: 0.4    # 明度增强
+    degrees: 10.0  # 旋转角度
+    translate: 0.1  # 平移比例
+    scale: 0.5     # 缩放比例
+    shear: 2.0     # 剪切角度
+    perspective: 0.0  # 透视变换
+    flipud: 0.0    # 上下翻转概率
+    fliplr: 0.5    # 左右翻转概率
+    mosaic: 0.5    # 马赛克增强概率
+    mixup: 0.0     # mixup增强概率
+
+train:
+  batch_size: 16
+  epochs: 100
+  optimizer: AdamW  # 优化器类型
+  lr: 0.001
+  weight_decay: 0.0005
+  momentum: 0.937
+  scheduler: cosine  # 学习率调度器
+  warmup_epochs: 3
+  warmup_momentum: 0.8
+  warmup_bias_lr: 0.1
+  save_dir: weights
+  log_dir: runs
+  save_interval: 10
+  eval_interval: 5
+  amp: True  # 使用混合精度训练
+  max_grad_norm: 10.0
+  ema:  # 指数移动平均
+    enabled: True
+    decay: 0.9999
+
+visualization:
+  histogram_interval: 5
+  grad_histogram: False
+  record_images: True
+  num_images_log: 4 

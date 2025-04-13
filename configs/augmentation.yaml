@@ -1,0 +1,42 @@
+# 酵母细胞图像增强配置
+data_augmentation:
+  # 增强强度设置
+  intensity: "medium"  # weak, medium, strong
+  
+  # MixUp高级增强
+  mixup_prob: 0.15     # 15%的概率执行MixUp混合增强
+  
+  # HSV色彩空间调整参数
+  hsv_h: 0.02          # 色调偏移幅度 (±0.02)
+  hsv_s: 0.7           # 饱和度调整幅度 (0.7)
+  
+  # 标准化参数
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  fill_value: [114, 114, 114]  # 灰色填充值
+  
+  # 空间变换参数
+  shift_limit: 0.05    # 平移范围 (5%)
+  scale_limit: 0.1     # 缩放范围 (±10%)
+  rotate_limit: 10     # 旋转角度范围 (±10°)
+  
+  # 色彩扰动参数
+  brightness: 0.1      # 亮度调整幅度 (±10%)
+  contrast: 0.1        # 对比度调整幅度 (±10%)
+  saturation: 0.1      # 饱和度调整幅度 (±10%)
+  
+  # 局部扰动参数
+  blur_limit: 3        # 高斯模糊强度
+  motion_blur_limit: 7 # 运动模糊强度
+  
+  # 是否使用边界框
+  use_bbox: true       # 启用边界框支持
+
+# 数据集划分比例
+train_ratio: 0.7
+val_ratio: 0.15
+test_ratio: 0.15
+
+# 目录设置
+raw_dir: "data/raw"
+output_dir: "data/processed" 

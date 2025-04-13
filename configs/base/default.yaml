@@ -1,0 +1,9 @@
+model:
+  name: yolov10_yeast
+  input_size: [640, 640]     # 输入尺寸（引用1）
+  num_classes: 1            # 酵母细胞类别数
+  backbone:
+    type: csp_darknet53     # 主干网络类型
+    width_multiple: 0.5     # 网络宽度缩放因子
+  head:
+    anchors: [[10,13], [16,30], [33,23]]  # 预设锚框（引用2）

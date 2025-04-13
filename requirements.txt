@@ -1,0 +1,34 @@
+# Deep Learning Framework
+torch==2.2.0
+torchvision==0.17.0
+torchaudio==2.2.0
+
+# Data Processing and Scientific Computing
+numpy==1.26.3
+scipy==1.11.4
+pandas==2.1.4
+scikit-learn==1.3.2
+scikit-image==0.22.0
+
+# Image Processing
+opencv-python==4.8.1.78
+pillow==10.1.0
+albumentations==1.3.1
+imgaug==0.4.0
+imageio==2.31.1
+
+# Visualization and Progress Display
+matplotlib==3.8.2
+tqdm==4.66.1
+tensorboard==2.15.1
+wandb==0.16.1
+
+# Configuration and Logging
+pyyaml==6.0.1
+
+# Model Export
+onnx==1.15.0
+onnxruntime-gpu==1.16.3
+
+# Annotation Tools
+labelme==5.3.1

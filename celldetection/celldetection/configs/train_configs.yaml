@@ -1,0 +1,164 @@
+# 训练配置文件
+
+# 基础训练配置
+base_train:
+  # 数据集配置
+  dataset:
+    name: "CellDataset"
+    train_path: "data/train"
+    val_path: "data/val"
+    test_path: "data/test"
+    num_classes: 1
+    class_names: ["cell"]
+    
+  # 数据加载配置
+  dataloader:
+    batch_size: 16
+    num_workers: 4
+    pin_memory: true
+    
+  # 数据增强配置
+  augmentation:
+    hsv_h: 0.015  # 色调增强
+    hsv_s: 0.7    # 饱和度增强
+    hsv_v: 0.4    # 亮度增强
+    degrees: 0.0   # 旋转角度
+    translate: 0.1  # 平移比例
+    scale: 0.5     # 缩放比例
+    shear: 0.0     # 剪切比例
+    perspective: 0.0  # 透视变换
+    flipud: 0.0    # 上下翻转概率
+    fliplr: 0.5    # 左右翻转概率
+    mosaic: 1.0    # Mosaic增强概率
+    mixup: 0.0     # MixUp增强概率
+    
+  # 优化器配置
+  optimizer:
+    name: "SGD"
+    lr: 0.01
+    momentum: 0.937
+    weight_decay: 0.0005
+    
+  # 学习率调度器配置
+  scheduler:
+    name: "CosineAnnealingLR"
+    T_max: 300
+    eta_min: 0.00001
+    
+  # 训练参数
+  params:
+    epochs: 300
+    warmup_epochs: 3
+    warmup_momentum: 0.8
+    warmup_bias_lr: 0.1
+    
+  # 损失函数配置
+  loss:
+    box_gain: 0.05  # 边界框损失权重
+    cls_gain: 0.5   # 分类损失权重
+    obj_gain: 1.0   # 目标性损失权重
+    
+  # 保存配置
+  save:
+    dir: "runs/train"
+    period: 10  # 每隔多少个epoch保存一次
+    best_only: false  # 是否只保存最佳模型
+
+# 高分辨率模型训练配置
+high_res_train:
+  # 继承基础配置
+  <<: *base_train
+  
+  # 数据集配置
+  dataset:
+    name: "CellDataset"
+    train_path: "data/train"
+    val_path: "data/val"
+    test_path: "data/test"
+    num_classes: 1
+    class_names: ["cell"]
+    
+  # 数据加载配置
+  dataloader:
+    batch_size: 8  # 减小批量大小以适应更大的模型
+    num_workers: 4
+    pin_memory: true
+    
+  # 优化器配置
+  optimizer:
+    name: "AdamW"  # 使用AdamW优化器
+    lr: 0.001
+    weight_decay: 0.01
+    
+  # 学习率调度器配置
+  scheduler:
+    name: "CosineAnnealingLR"
+    T_max: 300
+    eta_min: 0.00001
+    
+  # 训练参数
+  params:
+    epochs: 300
+    warmup_epochs: 5
+    
+  # 保存配置
+  save:
+    dir: "runs/train_highres"
+    period: 10
+    best_only: false
+
+# 高级数据增强训练配置
+advanced_augment_train:
+  # 继承基础配置
+  <<: *base_train
+  
+  # 数据增强配置
+  augmentation:
+    hsv_h: 0.015
+    hsv_s: 0.7
+    hsv_v: 0.4
+    degrees: 10.0   # 增加旋转角度
+    translate: 0.2  # 增加平移比例
+    scale: 0.5
+    shear: 0.2     # 增加剪切比例
+    perspective: 0.0
+    flipud: 0.3    # 增加上下翻转概率
+    fliplr: 0.5
+    mosaic: 1.0
+    mixup: 0.3     # 增加MixUp概率
+    cutout: 0.5    # 添加Cutout增强
+    cell_specific: 1.0  # 添加细胞特异性增强
+    cell_division: 0.3  # 添加细胞分裂增强
+    
+  # 保存配置
+  save:
+    dir: "runs/train_advanced_augment"
+    period: 10
+    best_only: false
+
+# 密度感知模型训练配置
+density_aware_train:
+  # 继承基础配置
+  <<: *base_train
+  
+  # 数据集配置
+  dataset:
+    name: "DensityCellDataset"  # 使用密度感知数据集
+    train_path: "data/train"
+    val_path: "data/val"
+    test_path: "data/test"
+    num_classes: 1
+    class_names: ["cell"]
+    
+  # 损失函数配置
+  loss:
+    box_gain: 0.05
+    cls_gain: 0.5
+    obj_gain: 1.0
+    density_gain: 0.1  # 添加密度损失权重
+    
+  # 保存配置
+  save:
+    dir: "runs/train_density_aware"
+    period: 10
+    best_only: false

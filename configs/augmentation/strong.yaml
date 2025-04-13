@@ -1,0 +1,73 @@
+augmentation:
+  # 基础增强
+  basic:
+    brightness_contrast:
+      enabled: true
+      brightness_limit: 0.3  # 增强更强烈
+      contrast_limit: 0.3
+      p: 0.8
+    blur:
+      enabled: true
+      blur_limit: 9
+      p: 0.5
+    gamma:
+      enabled: true
+      gamma_limit: [70, 130]  # 更宽的范围
+      p: 0.6
+    hsv:
+      enabled: true  # 增加HSV色调变换
+      h_limit: 0.1
+      s_limit: 0.3
+      v_limit: 0.3
+      p: 0.5
+  
+  # 几何变换增强
+  geometric:
+    horizontal_flip:
+      enabled: true
+      p: 0.5
+    vertical_flip:
+      enabled: true
+      p: 0.5
+    rotate:
+      enabled: true
+      limit: 90  # 允许更大角度旋转
+      p: 0.8
+    perspective:
+      enabled: true  # 启用透视变换
+      scale: [0.05, 0.1]
+      p: 0.3
+  
+  # 针对小目标的增强
+  small_object:
+    random_scale:
+      enabled: true
+      scale_limit: [0.5, 1.8]  # 更大的缩放范围
+      p: 0.7
+    grid_dropout:
+      enabled: true  # 启用网格丢弃
+      ratio: 0.2
+      p: 0.4
+    clahe:
+      enabled: true  # 对比度受限自适应直方图均衡化，提高小目标可见性
+      clip_limit: 4.0
+      p: 0.4
+  
+  # 马赛克增强
+  mosaic:
+    enabled: true  # 启用马赛克增强
+    p: 0.7  # 高概率应用
+
+  # Cutout增强
+  cutout:
+    enabled: true  # 启用Cutout
+    num_holes: 12  # 更多孔洞
+    max_h_size: 25
+    max_w_size: 25
+    p: 0.5
+
+  # MixUp增强
+  mixup:
+    enabled: true  # 启用MixUp
+    alpha: 0.3
+    p: 0.3

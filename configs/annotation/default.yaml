@@ -1,0 +1,23 @@
+# 图像处理配置
+image:
+  target_size: [512, 512]  # 目标图像大小
+  normalize: true          # 是否归一化
+  enhance_contrast: true   # 是否增强对比度
+
+# 细胞检测配置
+detection:
+  min_area: 100           # 最小细胞面积
+  max_area: 1000          # 最大细胞面积
+  threshold: 0.5          # 检测阈值
+
+# 数据路径配置
+paths:
+  raw_data: "data/raw"    # 原始数据目录
+  processed_data: "data/processed"  # 处理后的数据目录
+  annotations: "data/annotations"   # 标注数据目录
+
+# 标注工具配置
+annotation:
+  save_format: "json"     # 标注保存格式
+  visualize: true         # 是否可视化结果
+  show_progress: true     # 是否显示进度条 

@@ -1,0 +1,54 @@
+annotation:
+  save_format: json
+  show_progress: true
+  visualize: true
+augmentation:
+  blur_prob: 0.6
+  combine_methods: 3
+  custom_cells: true
+  enabled: true
+  gamma_range:
+  - 0.6
+  - 1.7
+  gaussian_noise: 0.2
+  intensity: medium
+  poisson_noise: true
+detection:
+  max_area: 1000
+  min_area: 100
+  threshold: 0.5
+image:
+  enhance_contrast: true
+  normalize: true
+  target_size:
+  - 512
+  - 512
+paths:
+  annotations: data/annotations
+  processed_data: data/processed_images
+  raw_data: data/raw
+visualization:
+  cell_colors:
+    budding:
+    - 255
+    - 0
+    - 0
+    dead:
+    - 255
+    - 255
+    - 0
+    normal:
+    - 0
+    - 255
+    - 0
+    viable:
+    - 0
+    - 0
+    - 255
+  color_code: true
+  dpi: 300
+  font_scale: 0.5
+  line_thickness: 2
+  output_dir: data/visualization
+  save_format: png
+  show_id: true
